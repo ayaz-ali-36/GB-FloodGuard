@@ -9,8 +9,18 @@ import os
 # -------------------------------------------------
 # 1. Load .env (local) – on Streamlit Cloud we use Secrets
 # -------------------------------------------------
-load_dotenv()                                   # reads .env when you run locally
-api_key = os.getenv("OPENWEATHER_API_KEY")       # .env variable
+     # .env variable
+     # Local: Load .env
+load_dotenv()
+api_key = os.getenv("OPENWEATHER_API_KEY")
+
+# Cloud: Use st.secrets
+if "OPENWEATHER_API_KEY" in st.secrets:
+    api_key = st.secrets["OPENWEATHER_API_KEY"]
+
+if not api_key:
+    st.error("API Key missing! Check `.env` (local) or Streamlit Secrets (cloud).")
+    st.stop()
 
 # If the key is missing locally, give a helpful message
 if not api_key:
